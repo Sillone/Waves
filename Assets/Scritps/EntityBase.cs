@@ -22,13 +22,14 @@ public abstract class EntityBase : MonoBehaviour
 
     protected virtual void StartEntity()
     {
-        
+
         AntiSpeedWalking = 30;
         AntiSpeedRotation = 40;
         isFree = true;
 
         var tt = GameObject.Find("_CONTROLLERS_");
-        matrixController = tt.GetComponent<MatrixController>();
+        if (tt != null)
+            matrixController = tt.GetComponent<MatrixController>();
 
         index = new Vector3();
         _trans = gameObject.transform;
