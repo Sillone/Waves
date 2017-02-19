@@ -10,7 +10,8 @@ public abstract class EntityBase : MonoBehaviour
     protected Transform _trans;
     public MatrixController matrixController;
     public Vector3 index;
-    public int Heigh { get { return (int)_trans.position.y; } }
+
+    public int MyValue;
 
     protected int progressWalk;
     private Vector3 _goingTo;   
@@ -39,7 +40,6 @@ public abstract class EntityBase : MonoBehaviour
     {
         if (isFree)
         {
-            var myVal = matrixController.GetValue(index);
             var newIndex = dir.normalized + index;
 
             var startRot = _trans.rotation;
@@ -65,7 +65,7 @@ public abstract class EntityBase : MonoBehaviour
                     {
                         matrixController.SetValueWithIndex(0, index);
                         index = newIndex;
-                        matrixController.SetValueWithIndex(myVal, index);
+                        matrixController.SetValueWithIndex(MyValue, index);
 
                         progressWalk = AntiSpeedWalking;
                         _goingTo = dir;

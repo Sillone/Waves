@@ -19,26 +19,26 @@ public class HeroController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            hero.GoForward();
-           // hero.GoTo(new Vector3(0, 0, 1));
+            //hero.GoForward();
+            hero.GoTo(new Vector3(0, 0, 1));
             GoRobot();
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
           //  hero.Rot(false);
-            //hero.GoTo(new Vector3(0, 0, -1));
+            hero.GoTo(new Vector3(0, 0, -1));
             GoRobot();
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            hero.Rot(true);
-           // hero.GoTo(new Vector3(1, 0, 0));
+           // hero.Rot(true);
+            hero.GoTo(new Vector3(1, 0, 0));
             GoRobot();
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            hero.Rot(false);
-           // hero.GoTo(new Vector3(-1, 0, 0));
+           // hero.Rot(false);
+            hero.GoTo(new Vector3(-1, 0, 0));
             GoRobot();
         }
     }
@@ -46,9 +46,9 @@ public class HeroController : MonoBehaviour
     public void GoRobot()
     {
         var v = mc.GetIndex(-1);
-        if (v.y == 1)
+        if ((int)v.y == 1)
         {
-            Vector2 her = new Vector2(v.x, v.z);
+            var her = new Vector2(v.x, v.z);
             if (robot != null)
                 robot.DoWave(her, mc.I, mc.J, mc.Data.First.Next.Value);
         }
@@ -59,10 +59,10 @@ public class HeroController : MonoBehaviour
     public void ShowMatrix()
     {
         var matrix = mc.Data.First.Next.Value;
-        for (int i = 0; i < mc.I; i++)
+        for (var i = 0; i < mc.I; i++)
         {
-            string s = string.Empty;
-            for (int j = 0; j < mc.J; j++)
+            var s = string.Empty;
+            for (var j = 0; j < mc.J; j++)
                 s = s + " " + matrix[i, j].ToString();
             print(i.ToString() + ")  " + s);
         }

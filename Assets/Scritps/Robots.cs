@@ -14,7 +14,7 @@ public class Robots : EntityBase
         StartEntity();
         Steps = 0;
         way = new LinkedList<Vector2>();
-        index = matrixController.GetIndex(-2);
+        index = matrixController.GetIndex(MyValue);
     }
 
     void Update()
@@ -35,21 +35,22 @@ public class Robots : EntityBase
 
     public void DoWave(Vector2 hero, int I, int J, int[,] arra)
     {
-        int step;
-        int startStep = step = 2;
-        var v = matrixController.GetIndex(-2);
+        var step = 2;
+        var v = matrixController.GetIndex(MyValue);
+
+        if (Mathf.Abs(hero.x - v.x) <=2 && Mathf.Abs(hero.y - v.z) <= 2)
         try
         {
-            arra[(int)v.x, (int)v.z] = step;
+            arra[(int) v.x, (int) v.z] = step;
 
             var flag = false;
             var end = false;
             while (!flag && !end)
             {
                 flag = true;
-                
-                for (int i = 0; i < I; i++)
-                    for (int j = 0; j < J; j++)
+
+                for (var i = 0; i < I; i++)
+                    for (var j = 0; j < J; j++)
                         if (arra[i, j] == step && !end)
                         {
                             if (i - 1 >= 0)
@@ -115,73 +116,56 @@ public class Robots : EntityBase
                 step++;
             }
 
-         /*   for (int i = 0; i < I; i++)
-            {
-                string s = string.Empty;
-                for (int j = 0; j < J; j++)
-                    s = s + " " + arra[i, j].ToString();
-                print(i.ToString() + ")  " + s);
-            }*/
-
             way = new LinkedList<Vector2>();
 
             flag = false;
-            var cicle = false;
-            int iH = (int)hero.x;
-            int jH = (int)hero.y;
-            startStep = step;
+            var iH = (int) hero.x;
+            var jH = (int) hero.y;
             while (!flag)
             {
-                cicle = false;
 
-                if (!cicle)
+                if (iH - 1 >= 0 && arra[iH - 1, jH] == step - 1)
                 {
-                    if (iH - 1 >= 0 && arra[iH - 1, jH] == step - 1)
-                    {
-                        way.AddFirst(new Vector2(1, 0));
-                        iH--;
-                        step--;
-                        if (step == 2)
-                            flag = true;
-                        cicle = true;
-                        continue;
-                    }
-                    if (iH + 1 < I && arra[iH + 1, jH] == step - 1)
-                    {
-                        way.AddFirst(new Vector2(-1, 0));
-                        step--;
-                        iH++;
-                        if (step == 2)
-                            flag = true;
-                        cicle = true;
-                        continue;
-                    }
-                    if (jH - 1 >= 0 && arra[iH, jH - 1] == step - 1)
-                    {
-                        way.AddFirst(new Vector2(0, 1));
-                        step--;
-                        jH--;
-                        if (step == 2)
-                            flag = true;
-                        cicle = true;
-                        continue;
-                    }
-                    if (jH + 1 < J && arra[iH, jH + 1] == step - 1)
-                    {
-                        way.AddFirst(new Vector2(0, -1));
-                        step--;
-                        jH++;
-                        if (step == 2)
-                            flag = true;
-                        cicle = true;
-                        continue;
-                    }
+                    way.AddFirst(new Vector2(1, 0));
+                    iH--;
+                    step--;
+                    if (step == 2)
+                        flag = true;
+                    continue;
+                }
+                if (iH + 1 < I && arra[iH + 1, jH] == step - 1)
+                {
+                    way.AddFirst(new Vector2(-1, 0));
+                    step--;
+                    iH++;
+                    if (step == 2)
+                        flag = true;
+                    continue;
+                }
+                if (jH - 1 >= 0 && arra[iH, jH - 1] == step - 1)
+                {
+                    way.AddFirst(new Vector2(0, 1));
+                    step--;
+                    jH--;
+                    if (step == 2)
+                        flag = true;
+                    continue;
+                }
+                if (jH + 1 < J && arra[iH, jH + 1] == step - 1)
+                {
+                    way.AddFirst(new Vector2(0, -1));
+                    step--;
+                    jH++;
+                    if (step == 2)
+                        flag = true;
+                    continue;
                 }
             }
-            string str = string.Empty;
+
+            var str = string.Empty;
             foreach (var cur in way)
             {
-                if (cur.x ==-1)
+                if (cur.x == -1)
                     str = str + "left ";
                 if (cur.x == 1)
                     str = str + "right ";
@@ -191,14 +175,15 @@ public class Robots : EntityBase
                 if (cur.y == 1)
                     str = str + "up ";
             }
-          //  print("way= " + str);
+            //  print("way= " + str);
         }
         catch
         {
             Debug.LogError("Ebanaya volna");
         }
-        Steps+=2;
+        Steps += 2;
     }
+
     private void OnTriggerEnter(Collider other)
     {
         print("robot Triger");
