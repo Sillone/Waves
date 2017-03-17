@@ -1,14 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using UnityEditorInternal;
 
 public class HeroController : MonoBehaviour
 {
-    private MatrixController mc;
+    private MatrixController _mc;
     public Hero hero;
     public Robots robot;
     private void Start()
     {
-        mc = gameObject.GetComponent<MatrixController>();
+        _mc = gameObject.GetComponent<MatrixController>();
     }
     void Update()
     {
@@ -45,24 +47,24 @@ public class HeroController : MonoBehaviour
 
     public void GoRobot()
     {
-        var v = mc.GetIndex(-1);
+        var v = _mc.GetIndex(-1);
         if ((int)v.y == 1)
         {
             var her = new Vector2(v.x, v.z);
             if (robot != null)
-                robot.DoWave(her, mc.I, mc.J, mc.Data.First.Next.Value);
+                robot.DoWave(her, _mc.I, _mc.J, _mc.Data[1]);
         }
         else
-            print("Walking error");
+            print("What with robot?");
     }
 
     public void ShowMatrix()
     {
-        var matrix = mc.Data.First.Next.Value;
-        for (var i = 0; i < mc.I; i++)
+        var matrix = _mc.Data[1];
+        for (var i = 0; i < _mc.I; i++)
         {
             var s = string.Empty;
-            for (var j = 0; j < mc.J; j++)
+            for (var j = 0; j < _mc.J; j++)
                 s = s + " " + matrix[i, j].ToString();
             print(i.ToString() + ")  " + s);
         }

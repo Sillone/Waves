@@ -10,17 +10,17 @@ public class WavesScr : MonoBehaviour {
 
     private int _current;
     private List<GameObject> _cunrrentWaves;
-    public List<int> breakList; 
+    public List<int> BlackList; 
     private Transform _trans;
 
-    public float speed;
+    public float Speed;
 
-    private float curentSize;
-    public float size;
+    private float _curentSize;
+    public float Size;
     private void Start()
     {
-        breakList = new List<int>();
-        curentSize = 0;
+        BlackList = new List<int>();
+        _curentSize = 0;
         _trans = gameObject.transform;
         _current = 0;
         _cunrrentWaves = new List<GameObject>();
@@ -31,13 +31,13 @@ public class WavesScr : MonoBehaviour {
     {
         Destroy(_cunrrentWaves[i]);
         print("destroed");
-        breakList.Add(i);
+        BlackList.Add(i);
     }
     private void CreateNewWave(int cur)
     {
         for (var i = 0; i < WavesAtTime; i++)
         {
-          //  if (!breakList.Exists(e => e == i))
+          //  if (!BlackList.Exists(e => e == i))
             {
                 var go = (GameObject) Instantiate(Waves[cur], _trans.position, Quaternion.identity, _trans);
                 go.transform.GetChild(0).GetComponent<WaveElement>().i = i;
@@ -49,11 +49,10 @@ public class WavesScr : MonoBehaviour {
 
     private void DestrotyWaves()
     {
-       
         foreach (var wave in _cunrrentWaves)
         {
             Destroy(wave);
-       //     _cunrrentWaves.Remove(wave);
+       //     _cunrrentWaves.Remove(Wave);
         }
         _cunrrentWaves = new List<GameObject>();
     }
@@ -62,9 +61,9 @@ public class WavesScr : MonoBehaviour {
 
     private void Update()
     {
-        var now = speed * Time.deltaTime;   
-        curentSize += now;
-        if (curentSize < size)
+        var now = Speed * Time.deltaTime;   
+        _curentSize += now;
+        if (_curentSize < Size)
             _cunrrentWaves.ForEach(
                 (cur) =>
                 {
@@ -82,7 +81,7 @@ public class WavesScr : MonoBehaviour {
             }
             else
             {
-                curentSize = 0;
+                _curentSize = 0;
                 CreateNewWave(_current);
             }
         }

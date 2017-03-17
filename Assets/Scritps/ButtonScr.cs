@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class ButtonScr : MonoBehaviour {
     public GameObject ButtonOther;
-    public DoorScr dorScr;
-    public bool off;
+    public DoorScr DorScr;
+    public bool Off;
     
     public void Activate()
     {
     //    Door.GetComponent<DoorScr>().ChangeState(true);
 
         print("Activateed");
-        dorScr.ChangeState(true);
+        DorScr.ChangeState(true);
         var go = Instantiate(ButtonOther, transform.position, transform.rotation);
         go.transform.localScale = transform.localScale;
 

@@ -1,22 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MatrixController : MonoBehaviour
 {
-    private LinkedList<int[,]> _data;
-    public LinkedList<int[,]> Data
+    public enum Values : int { HeroVal = -1, RobotVal = -2, EmptyVal = 0, WallVal = 1, Lift = -8 }
+    private List<int[,]> _data;
+    public List<int[,]> Data
     {
         get
         {
-            var res = new LinkedList<int[,]>();
+            var res = new List<int[,]>();
             foreach (var item in _data)
             {
-                int[,] addition = new int[I, J];
-                for (int i = 0; i < I; i++)
-                    for (int j = 0; j < J; j++)
+                var addition = new int[I, J];
+                for (var i = 0; i < I; i++)
+                    for (var j = 0; j < J; j++)
                         addition[i, j] = item[i, j];
-                res.AddLast(addition);
+                res.Add(addition);
             }
             return res;
         }
@@ -26,41 +29,42 @@ public class MatrixController : MonoBehaviour
     public int I,J;
     private void Start()
     {
-       /* GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>().index = GetIndex(-1);
-        GameObject.FindGameObjectWithTag("Rob").GetComponent<Robots>().index = GetIndex(-2);*/
+        /* GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>().Index = GetIndex(-1);
+        GameObject.FindGameObjectWithTag("Rob").GetComponent<Robots>().Index = GetIndex(-2);*/
     }
 
     public int GetValue(Vector3 index)
     {
-        var level = _data.First;
-        for (int y = 0; y < index.y; y++)
-            level = level.Next;
+        var result = 0;
+        try
+        {
+            result = _data[(int) index.y][(int) index.x, (int) index.z];
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            result = -666;
+        }
 
-        return level.Value[(int)index.x, (int)index.z];
+        return result;
     }
 
     public void SetValueWithIndex(int value, Vector3 index)
     {
-        var level = _data.First;
-        for (int y = 0; y < index.y; y++)
-            level = level.Next;
-        level.Value[(int)index.x, (int)index.z] = value;
+        _data[(int)index.y][(int)index.x, (int)index.z] = value;
     }
 
     public Vector3 GetIndex(int value)
     {
-        var level = _data.First;
-        for (int y = 0; y < _data.Count; y++)
+        for (var y = 0; y < _data.Count; y++)
         {
-            for (int i = 0; i < I; i++)
-                for (int j = 0; j < J; j++)
+            for (var i = 0; i < I; i++)
+                for (var j = 0; j < J; j++)
                 {
-                    if (level.Value[i, j] == value)
+                    if (_data[y][i, j] == value)
                         return new Vector3(i, y, j);
                 }
-            level = level.Next;
         }
         return new Vector3();
     }
-      
+
 }

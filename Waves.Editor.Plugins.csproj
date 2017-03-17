@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A1C8FD16-FB57-EF6C-E9D7-E3D308E33BA7}</ProjectGuid>
+    <ProjectGuid>{FD121534-255F-2AA2-87E4-61CE7D21D6A3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AssemblyName>Assembly-CSharp-Editor-firstpass</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -138,13 +138,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="WaveS.Plugins.csproj">
-      <Project>{F52855CA-63A7-13AB-30CE-41A760D058F0}</Project>
-      <Name>WaveS.Plugins</Name>
+    <ProjectReference Include="Waves.Plugins.csproj">
+      <Project>{8FE86C10-4345-2F31-F01E-D3BB8E728EC7}</Project>
+      <Name>Waves.Plugins</Name>
     </ProjectReference>
-    <ProjectReference Include="WaveS.csproj">
-      <Project>{DDC7BD28-8563-19A3-7517-B58A745BAA99}</Project>
-      <Name>WaveS</Name>
+    <ProjectReference Include="Waves.csproj">
+      <Project>{97EBDBA7-61DB-A45F-D5B9-A85A9F01ED74}</Project>
+      <Name>Waves</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +166,7 @@
   <ItemGroup>
     <None Include="Assets\LvlMatrix\1.txt" />
     <None Include="Assets\LvlMatrix\101.txt" />
+    <None Include="Assets\LvlMatrix\102.txt" />
     <None Include="Assets\LvlMatrix\2.txt" />
     <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />

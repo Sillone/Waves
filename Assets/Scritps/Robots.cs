@@ -1,42 +1,41 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 public class Robots : EntityBase
 {
-    public LinkedList<Vector2> way;
-    public int[,] matrix;
-    public int Count;
+    private List<Vector2> _way;
 
-    public int Steps;
+    private int _steps;
     void Start()
     {
         StartEntity();
-        Steps = 0;
-        way = new LinkedList<Vector2>();
-        index = matrixController.GetIndex(MyValue);
+        _steps = 0;
+        _way = new List<Vector2>();
+        Index = mc.GetIndex(MyValue);
     }
 
     void Update()
     {
         UpdateEntity();
-        if (way != null)
-            Count = way.Count;
+        if (_way == null)
+            return;
 
-        if (Count > 0 && isFree && Steps>0)
+        if (_way.Count > 0 && IsFree && _steps>0)
         {
-            Steps--;
-            var t = way.First.Value;
+            _steps--;
+            var t = _way.FirstOrDefault();
             GoTo(new Vector3(t.x, 0, t.y));
-            if (progressRot <= 0)
-                way.RemoveFirst();
+            if (_progressRot <= 0)
+                _way.Remove(t);
         }
     }
 
     public void DoWave(Vector2 hero, int I, int J, int[,] arra)
     {
         var step = 2;
-        var v = matrixController.GetIndex(MyValue);
+        var v = mc.GetIndex(MyValue);
 
         if (Mathf.Abs(hero.x - v.x) <=2 && Mathf.Abs(hero.y - v.z) <= 2)
         try
@@ -116,7 +115,7 @@ public class Robots : EntityBase
                 step++;
             }
 
-            way = new LinkedList<Vector2>();
+            _way = new List<Vector2>();
 
             flag = false;
             var iH = (int) hero.x;
@@ -126,7 +125,7 @@ public class Robots : EntityBase
 
                 if (iH - 1 >= 0 && arra[iH - 1, jH] == step - 1)
                 {
-                    way.AddFirst(new Vector2(1, 0));
+                    _way.Add(new Vector2(1, 0));
                     iH--;
                     step--;
                     if (step == 2)
@@ -135,7 +134,7 @@ public class Robots : EntityBase
                 }
                 if (iH + 1 < I && arra[iH + 1, jH] == step - 1)
                 {
-                    way.AddFirst(new Vector2(-1, 0));
+                    _way.Add(new Vector2(-1, 0));
                     step--;
                     iH++;
                     if (step == 2)
@@ -144,7 +143,7 @@ public class Robots : EntityBase
                 }
                 if (jH - 1 >= 0 && arra[iH, jH - 1] == step - 1)
                 {
-                    way.AddFirst(new Vector2(0, 1));
+                    _way.Add(new Vector2(0, 1));
                     step--;
                     jH--;
                     if (step == 2)
@@ -153,7 +152,7 @@ public class Robots : EntityBase
                 }
                 if (jH + 1 < J && arra[iH, jH + 1] == step - 1)
                 {
-                    way.AddFirst(new Vector2(0, -1));
+                    _way.Add(new Vector2(0, -1));
                     step--;
                     jH++;
                     if (step == 2)
@@ -161,27 +160,13 @@ public class Robots : EntityBase
                     continue;
                 }
             }
-
-            var str = string.Empty;
-            foreach (var cur in way)
-            {
-                if (cur.x == -1)
-                    str = str + "left ";
-                if (cur.x == 1)
-                    str = str + "right ";
-
-                if (cur.y == -1)
-                    str = str + "down ";
-                if (cur.y == 1)
-                    str = str + "up ";
-            }
-            //  print("way= " + str);
+            _way.Reverse();
         }
         catch
         {
             Debug.LogError("Ebanaya volna");
         }
-        Steps += 2;
+        _steps += 2;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -190,13 +175,13 @@ public class Robots : EntityBase
         print(other.tag);
         if (other.tag == "Waves")
         {
-            print("wave robot");
+            print("Wave robot");
             var mc = GameObject.Find("_CONTROLLERS_").GetComponent<MatrixController>();
             var v = mc.GetIndex(-1);
             if (v.y == 1)
             {
-                Vector2 her = new Vector2(v.x, v.z);
-                DoWave(her, mc.I, mc.J, mc.Data.First.Next.Value);
+                var her = new Vector2(v.x, v.z);
+                DoWave(her, mc.I, mc.J, mc.Data[1]);
             }
             else
                 print("Walking error");

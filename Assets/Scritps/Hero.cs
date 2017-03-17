@@ -1,21 +1,30 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using UnityEditor.VersionControl;
 
 public class Hero : EntityBase
 {
-    public GameObject wave;
+    public GameObject Wave;
+
     void Start()
     {
         StartEntity();
-        index = matrixController.GetIndex(-1);
+        Index = mc.GetIndex(-1);
+        Action<bool> action = e =>
+        {
+            Debug.Log(e ? "good" : "Bad");
+        };
+
+        action.Invoke(true);
     }
+
     private void Update()
     {
         UpdateEntity();
-        if (progressWalk==2)
-        {
-            Instantiate(wave, _trans.position, Quaternion.identity);
-        }
+        if (_progressWalk==2)
+            Instantiate(Wave, _trans.position, Quaternion.identity);
+        
     }
 
     public void GoForward()
@@ -48,15 +57,15 @@ public class Hero : EntityBase
         }
 
     }
-
+   
     public void Rot(bool right)
     {
         float ang;
         Vector3 vec;
         transform.rotation.ToAngleAxis(out ang, out vec);
 
-        bool flag = false;
-        for (int i = -5; i < 5; i++)
+        var flag = false;
+        for (var i = -5; i < 5; i++)
         {
             if (i*90 == ang)
             {
@@ -73,27 +82,13 @@ public class Hero : EntityBase
                      teemp= i * 90;
             _trans.rotation.SetEulerRotation(0, teemp, 0);
         }
-      //  print(ang.ToString() + "= angle   ");
         
         var y = (int)ang;
         if (y < -88 && y > -92)
             y = -90;
 
-       /* for (var i = -4; i <= 4; i++)
-            if (y > i * 90 - 3 && y < i * 90 + 3)
-                y = i * 90;*/
 
-     /*   if (y < 1)
-            y += 360;
-
-        if (y > 100)
-        {
-            print("shitty angle");
-            y = -180;
-           // right = !right;
-        }*/
-
-        print(y.ToString() + "= angle   ");
+        print(y + "= angle   ");
 
         switch (y)
         {
@@ -149,6 +144,7 @@ public class Hero : EntityBase
     }
     private void OnTriggerEnter(Collider other)
     {
+        print("some button");
         switch (other.tag)
         {
             case "Rob":

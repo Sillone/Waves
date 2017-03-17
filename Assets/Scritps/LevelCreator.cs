@@ -47,7 +47,7 @@ public class LevelCreator : MonoBehaviour
         var mc = gameObject.GetComponent<MatrixController>();
         mc.I = I;
         mc.J = J;
-        mc.Data = Data;
+        mc.Data = Data.ToList();
         Build();
     }
 
@@ -55,34 +55,33 @@ public class LevelCreator : MonoBehaviour
     {
         Mesh = new List<GameObject>();
         var size = 1f / 10f;
-        var Scale = new Vector3(size, size, size);
-        int k = 0;
+        var scale = new Vector3(size, size, size);
+        var k = 0;
         if (Data == null)
             print("pizdec");
-        else
-            print(Data.Count.ToString() +"= levels");
-        foreach (var ArrayMap in Data)
+        
+        foreach (var arrayMap in Data)
         {
-            for (int i = 0; i < I; i++)
-                for (int j = 0; j < J; j++)
+            for (var i = 0; i < I; i++)
+                for (var j = 0; j < J; j++)
                 {
-                    switch (ArrayMap[i, j])
+                    switch (arrayMap[i, j])
                     {
                         case -1:
                             {
                                 var ent = Instantiate(hero, new Vector3(i, k+1, j), Quaternion.identity);
-                                print(i + "= i   " + k + "=k   " + j + "=j");
+                                //print(i + "= i   " + k + "=k   " + j + "=j");
                               //  var scale = 5;
                                // ent.transform.localScale = new Vector3(scale, scale, scale);
                                 gameObject.GetComponent<HeroController>().hero = ent.GetComponent<Hero>();
-                                ent.GetComponent<Hero>().index = new Vector3(i, k, j);
+                                ent.GetComponent<Hero>().Index = new Vector3(i, k, j);
                                 break;
                             }
                         case -2:
                             {
                                 var ent = Instantiate(robot, new Vector3(i, k+1, j), Quaternion.identity);
                                 gameObject.GetComponent<HeroController>().robot = ent.GetComponent<Robots>();
-                                ent.GetComponent<Robots>().index = new Vector3(i, k, j);
+                                ent.GetComponent<Robots>().Index = new Vector3(i, k, j);
                                 break;
                             }
 
@@ -127,7 +126,7 @@ public class LevelCreator : MonoBehaviour
 
         foreach (var current in Mesh)
         {
-            current.transform.localScale = Scale;
+            current.transform.localScale = scale;
         }
     }
 }

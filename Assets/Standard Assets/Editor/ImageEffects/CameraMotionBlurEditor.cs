@@ -60,7 +60,7 @@ namespace UnityStandardAssets.ImageEffects
             }
             EditorGUILayout.PropertyField (velocityScale, new GUIContent(" Velocity Scale"));
             if (filterType.enumValueIndex >= 2) {
-                EditorGUILayout.LabelField(" Tile size used during reconstruction filter:", EditorStyles.miniLabel);
+                EditorGUILayout.LabelField(" Tile Size used during reconstruction filter:", EditorStyles.miniLabel);
                 EditorGUILayout.Slider(maxVelocity, 2.0f, 10.0f, new GUIContent(" Velocity Max"));
             }
             else

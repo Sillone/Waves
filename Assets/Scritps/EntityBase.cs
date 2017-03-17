@@ -6,150 +6,167 @@ public abstract class EntityBase : MonoBehaviour
     public int AntiSpeedWalking;
     public int AntiSpeedRotation;
 
-    public bool isFree;
+    public bool IsFree;
     protected Transform _trans;
-    public MatrixController matrixController;
-    public Vector3 index;
+    protected MatrixController mc;
+    public Vector3 Index;
 
     public int MyValue;
 
-    protected int progressWalk;
-    private Vector3 _goingTo;   
+    protected int _progressWalk;
+    private Vector3 _goingTo;
     private Vector3 _finalTo;
 
-    protected int progressRot;
-    public bool _rotateRight;
+    protected int _progressRot;
+    private bool _rotateRight;
     private Quaternion _finalRotate;
+
+    public bool Lifting;
+
+    public enum Values : int { HeroVal = -1, RobotVal = -2, EmptyVal = 0, WallVal = 1, Lift = -8 }
 
     protected virtual void StartEntity()
     {
+        Lifting = false;
 
         AntiSpeedWalking = 30;
-        AntiSpeedRotation = 40;
-        isFree = true;
+        AntiSpeedRotation = 15;
+        IsFree = true;
 
         var tt = GameObject.Find("_CONTROLLERS_");
         if (tt != null)
-            matrixController = tt.GetComponent<MatrixController>();
+            mc = tt.GetComponent<MatrixController>();
+        
 
-        index = new Vector3();
+        Index = new Vector3();
         _trans = gameObject.transform;
     }
 
     public virtual void GoTo(Vector3 dir)
     {
-        if (isFree)
+        if (!IsFree)
+            return;
+
+        var newIndex = dir.normalized + Index;
+
+        var startRot = _trans.rotation;
+        _trans.LookAt(_trans.position + dir);
+
+
+        if (startRot == _trans.rotation)
         {
-            var newIndex = dir.normalized + index;
+            //walk
+            //walk
+            var wasValue = mc.GetValue(newIndex);
+            if (newIndex.x < mc.I && newIndex.z < mc.J && newIndex.x >= 0 &&
+                newIndex.z >= 0 && wasValue != 1)
+            {
+                if (wasValue == 999)
+                    GameObject.Find("_CONTROLLERS_").GetComponent<LevelsController>().Finish = true;
+                
 
-            var startRot = _trans.rotation;
-            _trans.LookAt(_trans.position + dir);
+                var fwd = transform.TransformDirection(Vector3.forward);
 
-            if (startRot == _trans.rotation)
-            {   //walk
-                if (newIndex.x < matrixController.I && newIndex.z < matrixController.J && newIndex.x >= 0 && newIndex.z >= 0 && matrixController.GetValue(newIndex) != 1)
-                {// matrix cheks
-                    Vector3 fwd = transform.TransformDirection(Vector3.forward);
+                var ray = new Ray(_trans.position, fwd);
+                RaycastHit hit;
 
-                    Ray ray = new Ray(_trans.position, fwd);
-                    RaycastHit hit;
-
-                    DoorScr door = null;
-                    if (Physics.Raycast(ray, out hit, 1))
-                    {
-                        print(hit.transform.gameObject.name + "is near");
-                        door = hit.transform.gameObject.GetComponent<DoorScr>();
-                    }
-
-                    if (door ==null)//door check
-                    {
-                        matrixController.SetValueWithIndex(0, index);
-                        index = newIndex;
-                        matrixController.SetValueWithIndex(MyValue, index);
-
-                        progressWalk = AntiSpeedWalking;
-                        _goingTo = dir;
-                        _finalTo = _trans.position + dir;
-                        isFree = false;
-
-                        var anim = gameObject.GetComponent<Animator>();
-                        if (anim != null)
-                        {
-                            anim.SetInteger("State", 1);
-                        }
-                    }
-
+                DoorScr door = null;
+                if (Physics.Raycast(ray, out hit, 1))
+                {
+                    print(hit.transform.gameObject.name + "is near");
+                    door = hit.transform.gameObject.GetComponent<DoorScr>();
                 }
+
+                if (door != null) return;
+                mc.SetValueWithIndex(0, Index);
+                Index = newIndex;
+                mc.SetValueWithIndex(MyValue, Index);
+
+                _progressWalk = AntiSpeedWalking;
+                _goingTo = dir;
+                _finalTo = _trans.position + dir;
+                IsFree = false;
+
+                var anim = gameObject.GetComponent<Animator>();
+                if (anim != null)
+                    anim.SetBool("Walking", true);
+                //anim.SetInteger("State", 1);
+            }
+        }
+        else
+        {
+
+            ///rotate
+            if (Mathf.Abs(_trans.rotation.eulerAngles.y - startRot.eulerAngles.y) == 180)
+            {
+                _rotateRight = false;
+                //  print("around");
+
+                _trans.RotateAround(_trans.position, new Vector3(0, 1, 0), 90);
+                _finalRotate = _trans.rotation;
             }
             else
-            {///rotate
+            {
+                var temp = startRot.eulerAngles.y + 90;
+                if (temp >= 360)
+                    temp -= 360;
 
-                if (Mathf.Abs(_trans.rotation.eulerAngles.y - startRot.eulerAngles.y) == 180)
-                {
-                    _rotateRight = false;
-                    //  print("around");
+                _rotateRight = _trans.rotation.eulerAngles.y == temp;
 
-                    _trans.RotateAround(_trans.position, new Vector3(0, 1, 0), 90);
-                    _finalRotate = _trans.rotation;
-                }
-                else
-                {
-                    var temp = startRot.eulerAngles.y + 90;
-                    if (temp >= 360)
-                        temp -= 360;
-                    if (_trans.rotation.eulerAngles.y == temp)
-                    {
-                        _rotateRight = true;
-                    }
-                    else
-                    {
-                        _rotateRight = false;
-                    }
+                _finalRotate = _trans.rotation;
+            }
 
-                    _finalRotate = _trans.rotation;
-                }
+            _trans.rotation = startRot;
+            _progressRot = AntiSpeedRotation;
+            IsFree = false;
 
-
-
-                _trans.rotation = startRot;
-                progressRot = AntiSpeedRotation;
-                isFree = false;
-            }            
+            var anim = gameObject.GetComponent<Animator>();
+            if (anim != null)
+            {
+                anim.SetBool("Rotating", true);
+                anim.SetBool("Right", _rotateRight);
+            }
         }
     }
 
     public virtual void UpdateEntity()
     {
-        if (progressWalk > 0)
+        if (_progressWalk > 0)
         {
-            var deltaPos = _goingTo * 1f / (float)AntiSpeedWalking;
+            var deltaPos = _goingTo/AntiSpeedWalking;
 
             _trans.position += deltaPos;
 
-            progressWalk--;
-            if (progressWalk == 0)
+            _progressWalk--;
+            if (_progressWalk == 0)
             {
-                isFree = true;
+                if (!Lifting)
+                    IsFree = true;
                 _trans.position = _finalTo;
 
                 var anim = gameObject.GetComponent<Animator>();
                 if (anim != null)
                 {
-                    anim.SetInteger("State", 0);
+                    anim.SetBool("Walking",false);
                 }
             }
         }
-        if (progressRot > 0)
+        if (_progressRot > 0)
         {
-            if (_rotateRight)
-                _trans.RotateAround(_trans.position, new Vector3(0,1,0),90 / AntiSpeedRotation);
-            else
-                _trans.RotateAround(_trans.position, new Vector3(0, -1, 0), 90 / AntiSpeedRotation);
+            _trans.RotateAround(_trans.position, _rotateRight ? new Vector3(0, 1, 0) : new Vector3(0, -1, 0),
+                90f/AntiSpeedRotation);
+            _progressRot--;
 
-            progressRot--;
-            if (progressRot == 0)
+
+            if (_progressRot == 0)
             {
-                isFree = true;
+                var anim = gameObject.GetComponent<Animator>();
+                if (anim != null)
+                {
+                    anim.SetBool("Rotating", false);
+                }
+                IsFree = true;
+
                 _trans.rotation = _finalRotate;
             }
         }
