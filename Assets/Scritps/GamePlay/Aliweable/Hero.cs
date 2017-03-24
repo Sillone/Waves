@@ -13,22 +13,29 @@ public class Hero : EntityBase, IHero
     {
         StartEntity();
         Index = mc.GetIndex(-1);
-        Action<bool> action = e =>
-        {
-            Debug.Log(e ? "good" : "Bad");
-        };
 
-        action.Invoke(true);
     }
 
     private void Update()
     {
         UpdateEntity();
-        if (_progressWalk==2)
+        if (_progressWalk == 2)
+        {
             Instantiate(Wave, _trans.position, Quaternion.identity);
+            Ray ray = new Ray(_trans.position, _trans.position - new Vector3(0, -3f, 0));
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 4))
+            {
+                var hittedGo =hit.collider.gameObject;
+                print(hittedGo.tag);
+                if (hittedGo.tag == "Button")
+                    this.OnHitButton(hittedGo);
+            }
+        }
         
     }
-
+    /*
     public void GoForward()
     {
         var y =(int) _trans.rotation.y;
@@ -89,7 +96,7 @@ public class Hero : EntityBase, IHero
         if (y < -88 && y > -92)
             y = -90;
 
-
+      
         print(y + "= angle   ");
 
         switch (y)
@@ -144,9 +151,17 @@ public class Hero : EntityBase, IHero
             default: {  } break;
         }
     }
-    private void OnTriggerEnter(Collider other)
+
+  
+    */
+    private void OnHitButton(GameObject button)
     {
-        print("some button");
+        button.GetComponent<ButtonScr>().Activate();
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        print("some trigger enter");
         switch (other.tag)
         {
             case "Rob":

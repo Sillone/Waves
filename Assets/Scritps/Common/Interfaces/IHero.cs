@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.Scritps.Common
 {
-    interface IHero: IEntityBase
+    public interface IHero: IEntityBase
     {
     }
 }

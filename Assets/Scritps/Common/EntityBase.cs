@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Assets.Scritps.Common.Interfaces;
 using UnityEngine;
 
 namespace Assets.Scritps.Common
@@ -13,7 +10,7 @@ namespace Assets.Scritps.Common
 
         public bool IsFree;
         protected Transform _trans;
-        protected MatrixController mc;
+        protected IMatrixController mc;
         public Vector3 Index;
 
         public int MyValue;
@@ -128,8 +125,8 @@ namespace Assets.Scritps.Common
                 var anim = gameObject.GetComponent<Animator>();
                 if (anim != null)
                 {
-                    anim.SetBool("Rotating", true);
-                    anim.SetBool("Right", _rotateRight);
+                    //anim.SetBool("Rotating", true);
+                    //anim.SetBool("Right", _rotateRight);
                 }
             }
         }

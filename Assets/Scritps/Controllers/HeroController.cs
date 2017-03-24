@@ -1,14 +1,12 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-using UnityEditorInternal;
+﻿using UnityEngine;
 using Assets.Scritps.Common;
+using Assets.Scritps.Common.Interfaces;
 
 public class HeroController : MonoBehaviour ,IController
 {
-    private MatrixController _mc;
-    public Hero hero;
-    public Robots robot;
+    private IMatrixController _mc;
+    public IHero hero;
+    public IRobot robot;
     public void Start()
     {
         _mc = gameObject.GetComponent<MatrixController>();

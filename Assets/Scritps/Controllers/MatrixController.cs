@@ -1,11 +1,12 @@
 ﻿using Assets.Scritps.Common;
+using Assets.Scritps.Common.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MatrixController : MonoBehaviour , IController
+public class MatrixController : MonoBehaviour , IMatrixController
 {
     public enum Values : int { HeroVal = -1, RobotVal = -2, EmptyVal = 0, WallVal = 1, Lift = -8 }
     private List<int[,]> _data;
@@ -27,7 +28,8 @@ public class MatrixController : MonoBehaviour , IController
         set { _data = value; }
     }
 
-    public int I,J;
+    public int I { get; set; }
+    public int J { get; set; }
     public void Start()
     {
         /* GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>().Index = GetIndex(-1);

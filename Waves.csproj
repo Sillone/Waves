@@ -92,6 +92,7 @@
     <Compile Include="Assets\Scritps\Common\Interfaces\IEntity.cs" />
     <Compile Include="Assets\Scritps\Common\Interfaces\IEntityBase.cs" />
     <Compile Include="Assets\Scritps\Common\Interfaces\IHero.cs" />
+    <Compile Include="Assets\Scritps\Common\Interfaces\IMatrixController.cs" />
     <Compile Include="Assets\Scritps\Common\Interfaces\Irobot.cs" />
     <Compile Include="Assets\Scritps\Controllers\HeroController.cs" />
     <Compile Include="Assets\Scritps\Controllers\LevelCreator.cs" />

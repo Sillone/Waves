@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ButtonScr : MonoBehaviour {
-    public GameObject ButtonOther;
     public DoorScr DorScr;
     public bool Off;
-    
+    public Material ActiveMat;
+    public GameObject truba;
     public void Activate()
     {
     //    Door.GetComponent<DoorScr>().ChangeState(true);
 
-        print("Activateed");
-        DorScr.ChangeState(true);
-        var go = Instantiate(ButtonOther, transform.position, transform.rotation);
-        go.transform.localScale = transform.localScale;
+        gameObject.GetComponent<MeshRenderer>().materials = new Material[] { ActiveMat };
+        truba.GetComponent<MeshRenderer>().materials = new Material[] { ActiveMat };
 
-        Destroy(gameObject);
+        DorScr.ChangeState(true);
+      
+       // Destroy(gameObject);
     }
 }

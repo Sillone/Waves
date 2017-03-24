@@ -6,8 +6,10 @@ using UnityStandardAssets.ImageEffects;
 
 public class LevelsController : MonoBehaviour , IController
 {
+    public GameObject[] Levels;
     private GameObject _cam;
     private ColorCorrectionCurves _colorCorrectionCurves;
+    private int cur = 0;
 
     private bool _finish;
     public bool Finish
@@ -15,10 +17,8 @@ public class LevelsController : MonoBehaviour , IController
         get { return Finish; }
         set
         {
-            if (value)
-            {
-                _finish = true;
-            }
+            if (value)            
+                _finish = true;            
         }
     }
 
@@ -44,6 +44,17 @@ public class LevelsController : MonoBehaviour , IController
 
     private void Restart()
     {
-        Application.LoadLevel(Application.loadedLevelName);
+        cur++;
+        Destroy(GameObject.FindGameObjectWithTag("Level"));
+        Instantiate(Levels[cur]);
+
+        
+        var gM = gameObject.GetComponent<GetMatrix>();
+        gM.LvlNumber+=2;
+        gM.Start();
+        gameObject.GetComponent<LevelCreator>().Start();
+        gameObject.GetComponent<MatrixController>().Start();
+        gameObject.GetComponent<HeroController>().Start();
+
     }
 }

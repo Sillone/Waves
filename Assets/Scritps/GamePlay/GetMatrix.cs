@@ -12,7 +12,7 @@ public class GetMatrix : MonoBehaviour
     public int Floor, StringNumber, columnNumber, post, I, J, NowFloor;
     int[][,] value;
 
-    void Start()
+    public void Start()
     {
         FromFile();
         GetMatrixList();

@@ -26,7 +26,7 @@ public class LevelCreator : MonoBehaviour
     public float step;
     private List<GameObject> Mesh;
 
-    void Start()
+    public void Start()
     {
      /*   I = J = 6;
         Data = new LinkedList<int[,]>();

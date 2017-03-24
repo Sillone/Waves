@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.Scritps
 {
-    interface IEntityBase
+    public interface IEntityBase
     {
         void GoTo(Vector3 dir);
     }
