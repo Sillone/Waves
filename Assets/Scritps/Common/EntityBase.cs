@@ -74,8 +74,7 @@ namespace Assets.Scritps.Common
 
                     DoorScr door = null;
                     if (Physics.Raycast(ray, out hit, 1))
-                    {
-                        print(hit.transform.gameObject.name + "is near");
+                    { 
                         door = hit.transform.gameObject.GetComponent<DoorScr>();
                     }
 

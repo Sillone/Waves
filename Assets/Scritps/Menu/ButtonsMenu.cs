@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ButtonsMenu : MonoBehaviour {
     public void Game()
     {
-        Application.LoadLevel("temp");
+        SceneManager.LoadScene(1);
     }
     public void exit()
     {

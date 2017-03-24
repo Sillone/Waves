@@ -44,7 +44,6 @@ public class DoorScr : MonoBehaviour {
         {
             if (Steps > 0)
             {
-                print("even steps");
                 transform.Translate(0, -0.04f, 0);
                 Steps--;
             }

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Assets.Scritps.Common;
 
 public class Robots : EntityBase ,IRobot
@@ -37,7 +36,8 @@ public class Robots : EntityBase ,IRobot
     {
         var step = 2;
         var v = mc.GetIndex(MyValue);
-
+       // arra.DoWave(hero, I, J, step, v);
+        
         if (Mathf.Abs(hero.x - v.x) <=2 && Mathf.Abs(hero.y - v.z) <= 2)
         try
         {

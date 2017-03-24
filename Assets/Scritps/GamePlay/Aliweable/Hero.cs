@@ -1,8 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-using UnityEditor.VersionControl;
-using Assets.Scritps;
+﻿using UnityEngine;
 using Assets.Scritps.Common;
 
 public class Hero : EntityBase, IHero
@@ -27,8 +23,7 @@ public class Hero : EntityBase, IHero
 
             if (Physics.Raycast(ray, out hit, 4))
             {
-                var hittedGo =hit.collider.gameObject;
-                print(hittedGo.tag);
+                var hittedGo = hit.collider.gameObject;
                 if (hittedGo.tag == "Button")
                     this.OnHitButton(hittedGo);
             }
